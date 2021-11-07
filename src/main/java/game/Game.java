@@ -17,6 +17,7 @@ public abstract class Game implements IGame {
     protected Logger logger = Logger.getAnonymousLogger();
 
     protected Game() {
+        init();
         try {
             Handler fileHandler = new FileHandler("log.txt");
             fileHandler.setLevel(Level.FINE);
@@ -50,12 +51,12 @@ public abstract class Game implements IGame {
     @Override
     public void loop() {
         while (!isGameOver()) {
-            startCounter();
+//            startCounter();
             processInput();
             updateGameState();
             drawGame();
 
-            stopAndPost().ifPresent(fps -> System.out.println("FPS: " + fps));
+//            stopAndPost().ifPresent(fps -> System.out.println("FPS: " + fps));
         }
     }
 }
