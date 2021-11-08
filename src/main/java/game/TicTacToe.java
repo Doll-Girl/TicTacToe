@@ -3,8 +3,8 @@ package game;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+
+import static game.Position.getPosition;
 
 public class TicTacToe extends Game {
 
@@ -12,12 +12,10 @@ public class TicTacToe extends Game {
 
     private PlayerTurn pt = PlayerTurn.PLAYER_ONE;
 
-    private List<Object> winning = new ArrayList<>();
+    private Tile tileToUpdate;
 
     public TicTacToe() {
         board = new Board();
-        winning.add(List.of(Position.TOP_LEFT, Position.TOP, Position.TOP_RIGHT));
-
     }
 
     @Override
@@ -35,14 +33,12 @@ public class TicTacToe extends Game {
 
     }
 
-    private Tile tileToUpdate;
-
     private boolean parseUserInput() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         char c;
         try {
             c = (char) reader.read();
-            Position position = Position.getDirection(c);
+            Position position = getPosition(c);
             System.out.println("Read: " + position.name());
             tileToUpdate = board.getTile(position);
             return tileToUpdate.isValid();
@@ -65,9 +61,12 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean isGameOver() {
-//        board.getTiles().stream().filter(tile -> tile.pt.mark.isPresent());
-        return false;
+        return board.win();
     }
 
-
+    @Override
+    public void loop() {
+        super.loop();
+        System.out.println("Congratulations player: " + board.getWinner().name());
+    }
 }

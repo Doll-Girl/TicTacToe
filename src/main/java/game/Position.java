@@ -15,14 +15,13 @@ public enum Position {
     BOTTOM('2'),
     BOTTOM_RIGHT('3');
 
-
     private final char c;
 
     Position(char c) {
         this.c = c;
     }
 
-    public static Position getDirection(char c) {
+    public static Position getPosition(char c) {
         return Arrays.stream(Position.values())
                 .filter(d -> d.c == c)
                 .collect(MoreCollectors.onlyElement());
