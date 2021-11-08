@@ -1,9 +1,8 @@
 package game;
 
-import com.google.common.collect.MoreCollectors;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.MoreCollectors.onlyElement;
 import static game.Position.BOTTOM;
@@ -19,38 +18,37 @@ import static game.Position.TOP_RIGHT;
 public class Board {
 
     private List<Tile> tiles = new ArrayList<>(9);
-    private List<List<Position>> winning = new ArrayList<>();
-    private PlayerTurn winner;
+    private List<List<Position>> winningCombinations = new ArrayList<>();
+    private List<Tile> winner;
 
     public Board() {
         for (Position value : Position.values()) {
             tiles.add(new Tile(value));
         }
 
-        winning.add(List.of(TOP_LEFT, TOP, TOP_RIGHT));
-        winning.add(List.of(MIDDLE_LEFT, MIDDLE, MIDDLE_RIGHT));
-        winning.add(List.of(BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT));
+        winningCombinations.add(List.of(TOP_LEFT, TOP, TOP_RIGHT));
+        winningCombinations.add(List.of(MIDDLE_LEFT, MIDDLE, MIDDLE_RIGHT));
+        winningCombinations.add(List.of(BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT));
 
-        winning.add(List.of(TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT));
-        winning.add(List.of(TOP, MIDDLE, BOTTOM));
-        winning.add(List.of(TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT));
+        winningCombinations.add(List.of(TOP_LEFT, MIDDLE_LEFT, BOTTOM_LEFT));
+        winningCombinations.add(List.of(TOP, MIDDLE, BOTTOM));
+        winningCombinations.add(List.of(TOP_RIGHT, MIDDLE_RIGHT, BOTTOM_RIGHT));
 
-        winning.add(List.of(TOP_LEFT, MIDDLE, BOTTOM_RIGHT));
-        winning.add(List.of(TOP_RIGHT, MIDDLE, BOTTOM_LEFT));
+        winningCombinations.add(List.of(TOP_LEFT, MIDDLE, BOTTOM_RIGHT));
+        winningCombinations.add(List.of(TOP_RIGHT, MIDDLE, BOTTOM_LEFT));
 
     }
 
-    public boolean win() {
-        return winning.stream()
+    public Optional<List<Tile>> hasWon() {
+        return winningCombinations.stream()
                 .map(positions -> positions.stream()
                         .map(this::getTile).toList())
-                .map(this::hasWon)
-                .filter(win -> win)
-                .collect(MoreCollectors.toOptional())
-                .orElse(false);
+                .map(this::getWinningCombination)
+                .filter(Optional::isPresent)
+                .collect(onlyElement());
     }
 
-    private boolean hasWon(List<Tile> winningTiles) {
+    private Optional<List<Tile>> getWinningCombination(List<Tile> winningTiles) {
         PlayerTurn last = null;
         for (Tile tile : winningTiles) {
             if (last == null) {
@@ -58,34 +56,23 @@ public class Board {
             } else {
                 if (tile.playerTurn.equals(PlayerTurn.PLAYER_NONE) ||
                         !last.equals(tile.playerTurn)) {
-                    return false;
+                    return Optional.empty();
                 }
             }
         }
-        winner = last;
-        return true;
+        winner = winningTiles;
+        return Optional.of(winningTiles);
     }
 
     public Tile getTile(Position d) {
         return tiles.stream().filter(t -> t.getDirection().equals(d)).collect(onlyElement());
     }
 
-
-//    public boolean setTile(Position d, PlayerTurn pt) {
-//        return getTile(d).setMark(pt);
-//    }
-
-
-    public List<Tile> getTiles() {
-        return tiles;
-    }
-
-
     public void print() {
         tiles.forEach(tile -> System.out.print(tile.toString()));
     }
 
     public PlayerTurn getWinner() {
-        return winner;
+        return winner.get(0).playerTurn;
     }
 }

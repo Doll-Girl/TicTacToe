@@ -61,7 +61,7 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean isGameOver() {
-        return board.win();
+        return board.hasWon().isPresent();
     }
 
     @Override
