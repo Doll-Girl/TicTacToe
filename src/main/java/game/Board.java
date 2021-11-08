@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,12 @@ public class Board {
 
     }
 
+    public boolean hasTied() {
+        return tiles.stream()
+                .filter(tile -> !tile.playerTurn.equals(PlayerTurn.PLAYER_NONE))
+                .toList().containsAll(tiles);
+    }
+
     public Optional<List<Tile>> hasWon() {
         return winningCombinations.stream()
                 .map(positions -> positions.stream()
@@ -75,6 +82,10 @@ public class Board {
     }
 
     public PlayerTurn getWinner() {
-        return winner.get(0).playerTurn;
+        return Optional.ofNullable(winner)
+                .stream().flatMap(Collection::stream)
+                .map(tile -> tile.playerTurn)
+                .findAny()
+                .orElse(PlayerTurn.PLAYER_NONE);
     }
 }

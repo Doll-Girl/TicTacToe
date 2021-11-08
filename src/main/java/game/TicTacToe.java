@@ -64,12 +64,18 @@ public class TicTacToe extends Game {
 
     @Override
     public boolean isGameOver() {
-        return board.hasWon().isPresent();
+        return board.hasWon()
+                .map(list -> true)
+                .orElseGet(() -> board.hasTied());
     }
 
     @Override
     public void loop() {
         super.loop();
-        System.out.println("Congratulations player: " + board.getWinner().name());
+        if (board.getWinner().equals(PlayerTurn.PLAYER_NONE)) {
+            System.out.println("Game was a tie! (There are 16 was to tie a TicTacToe game)");
+        } else {
+            System.out.println("Congratulations player: " + board.getWinner().name());
+        }
     }
 }
