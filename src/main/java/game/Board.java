@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.collect.MoreCollectors.onlyElement;
+import static com.google.common.collect.MoreCollectors.toOptional;
 import static game.Position.BOTTOM;
 import static game.Position.BOTTOM_LEFT;
 import static game.Position.BOTTOM_RIGHT;
@@ -45,7 +46,8 @@ public class Board {
                         .map(this::getTile).toList())
                 .map(this::getWinningCombination)
                 .filter(Optional::isPresent)
-                .collect(onlyElement());
+                .collect(toOptional())
+                .orElse(Optional.empty());
     }
 
     private Optional<List<Tile>> getWinningCombination(List<Tile> winningTiles) {

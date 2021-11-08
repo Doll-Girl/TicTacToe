@@ -3,6 +3,7 @@ package game;
 import com.google.common.collect.MoreCollectors;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum Position {
     TOP_LEFT('7'),
@@ -21,10 +22,10 @@ public enum Position {
         this.c = c;
     }
 
-    public static Position getPosition(char c) {
+    public static Optional<Position> getPosition(char c) {
         return Arrays.stream(Position.values())
                 .filter(d -> d.c == c)
-                .collect(MoreCollectors.onlyElement());
+                .collect(MoreCollectors.toOptional());
     }
 
     public char getChar() {

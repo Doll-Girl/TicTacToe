@@ -28,6 +28,7 @@ public class TicTacToe extends Game {
             shouldStop = parseUserInput();
             if (!shouldStop) {
                 System.out.println("Please input a valid tile.\n" + valid);
+                break;
             }
         }
 
@@ -38,10 +39,12 @@ public class TicTacToe extends Game {
         char c;
         try {
             c = (char) reader.read();
-            Position position = getPosition(c);
-            System.out.println("Read: " + position.name());
-            tileToUpdate = board.getTile(position);
-            return tileToUpdate.isValid();
+            return getPosition(c)
+                    .map(pos -> {
+                        System.out.println("Read: " + pos.name());
+                        tileToUpdate = board.getTile(pos);
+                        return tileToUpdate.isValid();
+                    }).orElse(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
