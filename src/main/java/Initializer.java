@@ -1,6 +1,6 @@
 import com.google.inject.AbstractModule;
 import game.IGame;
-import game.TicTacToe;
+import tictactoe.TicTacToe;
 
 public class Initializer extends AbstractModule {
 

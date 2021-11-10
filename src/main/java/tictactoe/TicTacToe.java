@@ -1,10 +1,12 @@
-package game;
+package tictactoe;
+
+import game.Game;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static game.Position.getPosition;
+import static tictactoe.Position.getPosition;
 
 public class TicTacToe extends Game {
 

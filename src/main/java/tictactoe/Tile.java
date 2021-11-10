@@ -1,8 +1,8 @@
-package game;
+package tictactoe;
 
 public class Tile {
-    PlayerTurn playerTurn;
-    Position position;
+    private PlayerTurn playerTurn;
+    private Position position;
 
     public Tile(Position position) {
         this.playerTurn = PlayerTurn.PLAYER_NONE;
@@ -20,6 +20,10 @@ public class Tile {
 
     public Position getDirection() {
         return position;
+    }
+
+    public PlayerTurn getPlayerTurn() {
+        return playerTurn;
     }
 
     public boolean isValid() {

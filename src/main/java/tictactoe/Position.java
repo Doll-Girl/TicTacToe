@@ -1,4 +1,4 @@
-package game;
+package tictactoe;
 
 import com.google.common.collect.MoreCollectors;
 
@@ -27,9 +27,4 @@ public enum Position {
                 .filter(d -> d.c == c)
                 .collect(MoreCollectors.toOptional());
     }
-
-    public char getChar() {
-        return c;
-    }
-
 }

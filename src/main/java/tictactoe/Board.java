@@ -1,4 +1,4 @@
-package game;
+package tictactoe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,15 +7,15 @@ import java.util.Optional;
 
 import static com.google.common.collect.MoreCollectors.onlyElement;
 import static com.google.common.collect.MoreCollectors.toOptional;
-import static game.Position.BOTTOM;
-import static game.Position.BOTTOM_LEFT;
-import static game.Position.BOTTOM_RIGHT;
-import static game.Position.MIDDLE;
-import static game.Position.MIDDLE_LEFT;
-import static game.Position.MIDDLE_RIGHT;
-import static game.Position.TOP;
-import static game.Position.TOP_LEFT;
-import static game.Position.TOP_RIGHT;
+import static tictactoe.Position.BOTTOM;
+import static tictactoe.Position.BOTTOM_LEFT;
+import static tictactoe.Position.BOTTOM_RIGHT;
+import static tictactoe.Position.MIDDLE;
+import static tictactoe.Position.MIDDLE_LEFT;
+import static tictactoe.Position.MIDDLE_RIGHT;
+import static tictactoe.Position.TOP;
+import static tictactoe.Position.TOP_LEFT;
+import static tictactoe.Position.TOP_RIGHT;
 
 public class Board {
 
@@ -43,7 +43,7 @@ public class Board {
 
     public boolean hasTied() {
         return tiles.stream()
-                .filter(tile -> !tile.playerTurn.equals(PlayerTurn.PLAYER_NONE))
+                .filter(tile -> !tile.getPlayerTurn().equals(PlayerTurn.PLAYER_NONE))
                 .toList().containsAll(tiles);
     }
 
@@ -61,10 +61,10 @@ public class Board {
         PlayerTurn last = null;
         for (Tile tile : winningTiles) {
             if (last == null) {
-                last = tile.playerTurn;
+                last = tile.getPlayerTurn();
             } else {
-                if (tile.playerTurn.equals(PlayerTurn.PLAYER_NONE) ||
-                        !last.equals(tile.playerTurn)) {
+                if (tile.getPlayerTurn().equals(PlayerTurn.PLAYER_NONE) ||
+                        !last.equals(tile.getPlayerTurn())) {
                     return Optional.empty();
                 }
             }
@@ -84,7 +84,7 @@ public class Board {
     public PlayerTurn getWinner() {
         return Optional.ofNullable(winner)
                 .stream().flatMap(Collection::stream)
-                .map(tile -> tile.playerTurn)
+                .map(Tile::getPlayerTurn)
                 .findAny()
                 .orElse(PlayerTurn.PLAYER_NONE);
     }
